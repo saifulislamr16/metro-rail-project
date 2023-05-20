@@ -2,6 +2,7 @@ import Navbar from "../Navbar/Navbar";
 import metro_background from "../../public/metro_background.jpg";
 import Marquee from "react-fast-marquee";
 import { useEffect, useState } from "react";
+import './Home.css'
 const Home = () => {
     const weatherApi = `https://api.openweathermap.org/data/2.5/weather?lat=23.8103&lon=90.4125&appid=1d978d91ed6f50a0d6ea61d8136e8caf`;
     const dateApi = 'https://worldtimeapi.org/api/timezone/Asia/Dhaka';
@@ -14,6 +15,8 @@ const Home = () => {
             .then(res => res.json())
             .then(data => setWeather(data));
     }, [])
+    console.log(weather.main.temp);
+    console.log(weather.weather[0].main);
     useEffect(() => {
         fetch(dateApi)
             .then(res => res.json())
@@ -69,31 +72,40 @@ const Home = () => {
         const interval = setInterval(() => {
             setTime(updateTime(time));
         }, 60000);
-    
+
         return () => {
-          clearInterval(interval);
+            clearInterval(interval);
         };
-      }, [time]);
+    }, [time]);
     return (
         <div>
-            <div className={`w-full h-screen bg-orange-400  bg-cover bg-center`}>
+            <div className={`w-full h-screen bg-container  bg-cover bg-center relative`}>
                 <div className="absolute top-0 w-full z-10">
                     <Navbar></Navbar>
                 </div>
 
-                <div className="my-3 top-20 absolute w-full h-8 text-lg text-red-600 font-semibold backdrop-blur-sm bg-white/30">
+                <div className="my-3 top-20 absolute w-full h-15 text-lg text-red-600 font-semibold backdrop-blur-sm bg-white/30">
+                <div className="flex align-middle">
+                <button  className=" btn btn-secondary btn-xs sm:btn-sm md:h-10 md:w-18 lg:btn-lg bg-red-600">News</button>
                     <Marquee className="">
                         I can be a React component, multiple React components, or just some text.
                     </Marquee>
                 </div>
-                <div className="mx-auto absolute top-1/3 left-1/3  text-center">
-                    <h1 className="text-5xl font-bold text-white">Welcome to Dhaka Metro</h1>
-                    <h2>
-                        {dateM}
-                    </h2>
-                    <h2>
-                        {time}
-                    </h2>
+                </div>
+                <div className="md:p-12 p-3 mx-auto absolute md:top-1/3 md:left-1/3 top-60 left-0  text-center flex flex-col justify-center items-center backdrop-blur-sm bg-black/30 rounded-sm">
+                    <h1 className="md:text-5xl text-3xl font-bold text-white">Welcome to Dhaka Metro</h1>
+                    <div className="md:text-3xl text-xl font-semibold text-white flex mt-5">
+                        <h2>{dateM}</h2>
+                        <h2 className="md:ml-14 ml-5">{time}</h2>
+                    </div>
+                    <div className="md:text-3xl text-xl font-semibold text-white flex items-center mt-5">
+                        <img src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`}></img>
+                        <h1>{weather.weather[0].main}</h1>
+                        <div className="text-center">
+                            <h1 className="md:ml-14 ml-5">{Math.round((weather.main.temp - 273.15).toFixed(2))} C</h1>
+                            <h1 className="md:ml-14 ml-5">Dhaka</h1>
+                        </div>
+                    </div>
 
                 </div>
             </div>

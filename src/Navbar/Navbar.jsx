@@ -6,10 +6,10 @@ import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
     const [open, setOpen] = useState(false);
-    const [isLogged, setIsLogged] = useState(false);
+    const [isLogged, setIsLogged] = useState(true);
     return (
         <div>
-            <div className="navbar flex flex-row justify-between rounded-sm backdrop-blur-3xl bg-transparent hover:bg-white">
+            <div className=" text-white navbar flex flex-row justify-between rounded-sm backdrop-blur-3xl bg-transparent hover:bg-black">
                 <Link to="/">
                     <div className="flex flex-row">
                         <img src="/public/dmtcl-logo.png" className="h-8 w-12"></img>
