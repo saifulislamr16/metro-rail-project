@@ -1,11 +1,11 @@
 
 export default {
   content: ["./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",],
+    "./src/**/*.{js,ts,jsx,tsx}","./node_modules/flowbite/**/*.js"],
   theme: {
     extend: {},
   },
 
-  plugins: [require("daisyui")],
+  plugins: [require("daisyui", 'flowbite/plugin')],
 }
 

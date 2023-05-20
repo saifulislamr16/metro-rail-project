@@ -1,9 +1,10 @@
+import { Outlet } from "react-router-dom";
 
 
 const Main = () => {
     return (
-        <div>
-            
+        <div className=" mx-auto" >
+            <Outlet></Outlet>
         </div>
     );
 };
