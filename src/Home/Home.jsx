@@ -15,8 +15,7 @@ const Home = () => {
             .then(res => res.json())
             .then(data => setWeather(data));
     }, [])
-    console.log(weather.main.temp);
-    console.log(weather.weather[0].main);
+    console.log(weather);
     useEffect(() => {
         fetch(dateApi)
             .then(res => res.json())
@@ -85,76 +84,66 @@ const Home = () => {
                 </div>
 
                 <div className="my-3 top-20 absolute w-full h-15 text-lg text-red-600 font-semibold backdrop-blur-sm bg-white/30">
-                <div className="flex align-middle">
-                <button  className=" btn btn-secondary btn-xs sm:btn-sm md:h-10 md:w-18 lg:btn-lg bg-red-600">News</button>
-                    <Marquee className="">
-                        I can be a React component, multiple React components, or just some text.
-                    </Marquee>
-                </div>
+                    <div className="flex align-middle">
+                        <button className=" btn btn-secondary btn-xs sm:btn-sm md:h-10 md:w-18 lg:btn-lg bg-red-600">News</button>
+                        <Marquee className="">
+                            I can be a React component, multiple React components, or just some text.
+                        </Marquee>
+                    </div>
                 </div>
                 <div className="md:p-12 p-3 mx-auto absolute md:top-1/3 md:left-1/3 top-60 left-0  text-center flex flex-col justify-center items-center backdrop-blur-sm bg-black/30 rounded-sm">
                     <h1 className="md:text-5xl text-3xl font-bold text-white">Welcome to Dhaka Metro</h1>
-                    <div className="md:text-3xl text-xl font-semibold text-white flex mt-5">
-                        <h2>{dateM}</h2>
-                        <h2 className="md:ml-14 ml-5">{time}</h2>
+                    <div className="md:text-3xl text-xl font-semibold text-white  mt-5">
+                        {
+                            dateM !== null && time !== null &&
+                            <div className="flex">
+                                <h2>{dateM}</h2>
+                                <h2 className="md:ml-14 ml-5">{time}</h2>
+                            </div>
+                        }
                     </div>
-                    <div className="md:text-3xl text-xl font-semibold text-white flex items-center mt-5">
-                        <img src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`}></img>
-                        <h1>{weather.weather[0].main}</h1>
-                        <div className="text-center">
-                            <h1 className="md:ml-14 ml-5">{Math.round((weather.main.temp - 273.15).toFixed(2))} C</h1>
-                            <h1 className="md:ml-14 ml-5">Dhaka</h1>
-                        </div>
+                    <div className="md:text-3xl text-xl font-semibold text-white  mt-5">
+                        {
+                            weather !== null &&
+                            <div className="flex items-center">
+                                <img src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`}></img>
+                                <h1>{weather.weather[0].main}</h1>
+                                <div className="text-center">
+                                    <h1 className="md:ml-14 ml-5">{Math.round((weather.main.temp - 273.15).toFixed(2))} C</h1>
+                                    <h1 className="md:ml-14 ml-5">Dhaka</h1>
+                                </div>
+                            </div>
+                        }
                     </div>
 
                 </div>
             </div>
-            <div className="my-2">
-                <div id="default-carousel" className="relative md:w-[800px] w-72 md:h-24 h-14 bg-red-800 mx-auto my-4" data-carousel="slide">
-                    {/* <!-- Carousel wrapper --> */}
-                    <div className="relative overflow-hidden rounded-lg md:w-[800px] w-72 md:h-24 h-14 bg-black">
-                        {/* <!-- Item 1 --> */}
-                        <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                            <img src={metro_background} className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
+            <div className="md:my-8 my-4">
+                <div>
+                    <div className="carousel w-11/12 h-60 mx-auto">
+                        <div id="slide1" className="carousel-item relative w-full">
+                            <img src="https://new-media.dhakatribune.com/en/uploads/2022/09/27/rsz-photo---bkash-puja-offer.jpeg" className="w-full" />
+                            <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                                <a href="#slide3" className="btn btn-circle">❮</a>
+                                <a href="#slide2" className="btn btn-circle">❯</a>
+                            </div>
                         </div>
-                        {/* <!-- Item 2 --> */}
-                        <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                            <img src={metro_background} className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
+                        <div id="slide2" className="carousel-item relative w-full">
+                            <img src="https://nagad.com.bd/uploads/slider/pGb6BgrWSNKUDHKdvG7FYHicKhvhL2VyT8ZWH3fn.jpg" className="w-full" />
+                            <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                                <a href="#slide1" className="btn btn-circle">❮</a>
+                                <a href="#slide3" className="btn btn-circle">❯</a>
+                            </div>
                         </div>
-                        {/* <!-- Item 3 --> */}
-                        <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                            <img src={metro_background} className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
+                        <div id="slide3" className="carousel-item relative w-full">
+                            <img src="https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/bca18439712029.577207f36f010.jpg" className="w-full" />
+                            <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                                <a href="#slide2" className="btn btn-circle">❮</a>
+                                <a href="#slide1" className="btn btn-circle">❯</a>
+                            </div>
                         </div>
-                        {/* <!-- Item 4 --> */}
-                        <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                            <img src={metro_background} className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
-                        </div>
-                        {/* <!-- Item 5 --> */}
-                        <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                            <img src={metro_background} className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
-                        </div>
+
                     </div>
-                    {/* <!-- Slider indicators --> */}
-                    <div className="absolute z-30 flex md:space-x-3 space-x-1 -translate-x-1/2 md:-bottom-5 -bottom-4  left-1/2 bg-lime-400">
-                        <button type="button" className="md:w-3 w-2 h-2 md:h-3 rounded-full " aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
-                        <button type="button" className="md:w-3 w-2 h-2 md:h-3 rounded-full " aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
-                        <button type="button" className="md:w-3 w-2 h-2 md:h-3 rounded-full " aria-current="false" aria-label="Slide 3" data-carousel-slide-to="2"></button>
-                        <button type="button" className="md:w-3 w-2 h-2 md:h-3 rounded-full " aria-current="false" aria-label="Slide 4" data-carousel-slide-to="3"></button>
-                        <button type="button" className="md:w-3 w-2 h-2 md:h-3 rounded-full " aria-current="false" aria-label="Slide 5" data-carousel-slide-to="4"></button>
-                    </div>
-                    {/* <!-- Slider controls --> */}
-                    {/* <button type="button" className="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
-                        <span className="inline-flex items-center justify-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                            <svg aria-hidden="true" className="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                            <span className="sr-only">Previous</span>
-                        </span>
-                    </button>
-                    <button type="button" className="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
-                        <span className="inline-flex items-center justify-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                            <svg aria-hidden="true" className="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                            <span className="sr-only">Next</span>
-                        </span>
-                    </button> */}
                 </div>
             </div>
         </div>

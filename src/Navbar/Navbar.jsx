@@ -9,7 +9,7 @@ const Navbar = () => {
     const [isLogged, setIsLogged] = useState(true);
     return (
         <div>
-            <div className=" text-white navbar flex flex-row justify-between rounded-sm backdrop-blur-3xl bg-transparent hover:bg-black">
+            <div className=" text-white navbar flex flex-row justify-between rounded-sm backdrop-blur-3xl bg-transparent hover:bg-gray-900">
                 <Link to="/">
                     <div className="flex flex-row">
                         <img src="/public/dmtcl-logo.png" className="h-8 w-12"></img>
@@ -34,7 +34,7 @@ const Navbar = () => {
                                 <img src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />
                             </div>
                         </label>
-                        <ul tabIndex={0} className={` ${open ? "mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52" : 'absolute -top-36'}`}>
+                        <ul tabIndex={0} className={` ${open ? "mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52 text-black" : 'absolute -top-36'}`}>
                             <li>
                                 <a className="justify-between">
                                     Profile
@@ -55,10 +55,10 @@ const Navbar = () => {
                     <div className="dropdown dropdown-end">
                         <label onClick={() => setOpen(!open)} tabIndex={0} className="btn btn-ghost btn-circle avatar">
                             <span>
-                                <Bars3Icon className="h-6 w-6 text-blue-500" />
+                                <Bars3Icon className="h-6 w-6" />
                             </span>
                         </label>
-                        <ul tabIndex={0} className={` ${open ? 'mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-40' : 'absolute -top-96'}`}>
+                        <ul tabIndex={0} className={` ${open ? 'text-black mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-40' : 'absolute -top-96'}`}>
                             <li><NavLink to="/" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-teal-300" : ""}>Home</NavLink></li>
                             <li><HashLink smooth to="/#scroll">Buy Ticket </HashLink></li>
                             <li><Link to="/mrt">MRT Pass</Link></li>
