@@ -9,7 +9,7 @@ const Navbar = () => {
     const [isLogged, setIsLogged] = useState(true);
     return (
         <div>
-            <div className=" text-white navbar flex flex-row justify-between rounded-sm backdrop-blur-3xl bg-transparent hover:bg-gray-900">
+            <div className=" text-black hover:text-white navbar flex flex-row justify-between rounded-sm backdrop-blur-3xl bg-transparent hover:bg-gray-900">
                 <Link to="/">
                     <div className="flex flex-row">
                         <img src="/public/dmtcl-logo.png" className="h-8 w-12"></img>
