@@ -159,7 +159,7 @@ const Home = () => {
                         </Marquee>
                     </div>
                 </div>
-                <div className="md:p-12 p-3 mx-auto absolute md:top-1/4 md:left-1/3 top-60 left-0  text-center flex flex-col justify-center items-center backdrop-blur-sm bg-black/30 rounded-sm">
+                <div className="md:p-12 p-3 mx-auto absolute md:top-28 md:left-8 top-60 left-0  text-center flex flex-col justify-center items-center backdrop-blur-sm bg-black/30 rounded-sm">
                     <h1 id="google_translate_element" className="md:text-5xl text-3xl drop-shadow-2xl font-bold text-white"><span className="text-sky-500">Welcome</span> to Dhaka Metro</h1>
                     <div className="md:text-3xl text-xl drop-shadow-2xl font-semibold text-white  mt-10">
                         {
