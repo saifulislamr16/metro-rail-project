@@ -5,8 +5,35 @@ import gmail from "../../public/gmail.png"
 import info from "../../public/info.png"
 import Ticket from "../../public/ticket.png"
 import news from "../../public/megaphone.png"
+import { GoogleMap, LoadScript, DirectionsService, DirectionsRenderer } from '@react-google-maps/api';
 import './Home.css'
 const Home = () => {
+    const stationList = [
+        "Uttara North", "Uttara Center", "Uttara South", "Pallabi", "Mirpur 11", "Mirpur 10", "Kazipara", "Shewrapara", "Agargaon", "Bijoy Sarani", "Farmgate", "Kawran Bazar", "Shahbagh", "Dhaka University", "Bangladesh Secretariat", "Motijheel", "Komolapur"];
+    const fairList = [
+        [0, 20, 20, 30, 30, 40, 40, 50, 60, 60, 70, 80, 80, 90, 90, 100, 100],
+        [20, 0, 20, 20, 30, 30, 40, 40, 50, 60, 60, 70, 80, 80, 90, 90, 100],
+        [20, 20, 0, 20, 20, 30, 30, 40, 40, 50, 60, 60, 70, 70, 80, 90, 90],
+        [30, 20, 20, 0, 20, 20, 20, 30, 30, 40, 50, 50, 60, 60, 70, 80, 80],
+        [30, 30, 20, 20, 0, 20, 20, 20, 30, 40, 40, 50, 50, 60, 70, 70, 80],
+        [40, 30, 30, 20, 20, 0, 20, 20, 20, 30, 30, 40, 50, 50, 60, 60, 70],
+        [40, 40, 30, 20, 20, 20, 0, 20, 20, 20, 30, 40, 40, 50, 50, 60, 70],
+        [50, 40, 40, 30, 20, 20, 20, 0, 20, 20, 20, 30, 40, 40, 50, 50, 60],
+        [60, 50, 40, 30, 30, 20, 20, 20, 0, 20, 20, 20, 30, 30, 40, 50, 50],
+        [60, 60, 50, 40, 40, 30, 20, 20, 20, 0, 20, 20, 20, 30, 40, 40, 50],
+        [70, 60, 60, 50, 40, 30, 30, 20, 20, 20, 0, 20, 20, 20, 30, 30, 40],
+        [80, 70, 60, 50, 50, 40, 40, 30, 20, 20, 20, 0, 20, 20, 20, 30, 30],
+        [80, 80, 70, 60, 50, 50, 40, 40, 30, 20, 20, 20, 0, 20, 20, 20, 30],
+        [90, 80, 70, 60, 60, 50, 50, 40, 30, 30, 20, 20, 20, 0, 20, 20, 20],
+        [90, 90, 80, 70, 70, 60, 50, 50, 40, 40, 30, 20, 20, 20, 0, 20, 20],
+        [100, 90, 90, 80, 70, 60, 60, 50, 50, 40, 30, 30, 20, 20, 20, 0, 20],
+        [100, 100, 90, 80, 80, 70, 70, 60, 50, 50, 40, 30, 30, 20, 20, 20, 0]
+    ];
+    const [origin, setOrigin] = useState('');
+    const [destination, setDestination] = useState('');
+    const [directions, setDirections] = useState(null);
+    const [fair, setFair] = useState(0);
+    const apiKey = 'AIzaSyCWMPjB14EMyIGLnt5JgXJEO6B7phaDTfc';
 
     const weatherApi = `https://api.openweathermap.org/data/2.5/weather?lat=23.8103&lon=90.4125&appid=1d978d91ed6f50a0d6ea61d8136e8caf`;
     const dateApi = 'https://worldtimeapi.org/api/timezone/Asia/Dhaka';
@@ -18,6 +45,9 @@ const Home = () => {
     const [email, setEmail] = useState(false);
     const [ticket, setTicket] = useState({});
     const [data, setData] = useState(null);
+    const [originSelect, setOriginSelect] = useState(false);
+    const [destSelect, setDestSelect] = useState(false);
+    const [ban, setBan] = useState(false);
     const fetchWeatherData = () => {
         fetch(weatherApi)
             .then(res => res.json())
@@ -97,6 +127,15 @@ const Home = () => {
             clearInterval(interval);
         };
     }, [time]);
+    const calculateFair = () => {
+        if (originSelect && destSelect) {
+            const i = stationList.indexOf(origin);
+            const j = stationList.indexOf(destination);
+            if (i !== -1 && j !== -1) {
+                setFair(fairList[i][j]);
+            }
+        }
+    }
 
     const handleSignUp = event => {
         event.preventDefault();
@@ -113,9 +152,6 @@ const Home = () => {
         if (to === "Select Station") {
             errors.to = "Please select a station";
         }
-        if (phone === '' && !email) {
-            errors.phone = "Please enter phone number"
-        }
         // If there are validation errors, update the error state and return
         if (Object.keys(errors).length > 0) {
             setError(errors);
@@ -127,13 +163,7 @@ const Home = () => {
             const info = {};
             info.from = from;
             info.to = to;
-            if (email) {
-                info.phone = ""
-                info.email = "userEmail"
-            } else {
-                info.phone = phone
-                info.email = ""
-            }
+            info.fair = fair;
             setTicket(info);
         }
 
@@ -141,9 +171,54 @@ const Home = () => {
 
     useEffect(() => {
         fetch('data.json')
-        .then(res => res.json())
-        .then(data => setData(data));
-    },[])
+            .then(res => res.json())
+            .then(data => setData(data));
+    }, [])
+
+
+    const [selectedOption, setSelectedOption] = useState('');
+    const calculateDirections = () => {
+        const directionsService = new window.google.maps.DirectionsService();
+
+        directionsService.route(
+            {
+                origin: origin,
+                destination: destination,
+                travelMode: 'DRIVING',
+            },
+            (response, status) => {
+                if (status === 'OK') {
+                    setDirections(response);
+                } else {
+                    console.error('Directions request failed:', status);
+                }
+            }
+        );
+    };
+    const handleSelectChangeFrom = (value) => {
+        if (value !== 'Select Station') {
+            setOrigin(value);
+            setOriginSelect(true);
+        }
+        else {
+            setOriginSelect(false);
+        }
+
+    };
+
+    const handleSelectChangeTo = (value) => {
+        if (value !== 'Select Station') {
+            setDestination(value);
+            setDestSelect(true);
+        }
+        else {
+            setDestSelect(false);
+        }
+    };
+    useEffect(() => {
+        calculateDirections()
+        calculateFair()
+    }, [destination, origin])
 
 
     return (
@@ -228,23 +303,25 @@ const Home = () => {
 
                     <div className="mb-6">
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">From</label>
-                        <select id="countries" name="from" className={`${error.from ? "bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-red-100 dark:border-red-400" : "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}`}>
+                        <select onChange={(e) => handleSelectChangeFrom(e.target.value)} id="origin" name="from" className={`${error.from ? "bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-red-100 dark:border-red-400" : "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}`}>
                             <option>Select Station</option>
                             <option>Uttara North</option>
                             <option>Uttara Center</option>
                             <option>Uttara South</option>
-                            <option>pallabi</option>
-                            <option>Mirpur-11</option>
-                            <option>Mirpur-10</option>
+                            <option>Pallabi</option>
+                            <option>Mirpur 11</option>
+                            <option>Mirpur 10</option>
                             <option>Kazipara</option>
                             <option>Shewrapara</option>
-                            <option>Bijoy Sarawni</option>
-                            <option>Framgate</option>
-                            <option>Karwan Bazar</option>
-                            <option>Shahbag</option>
+                            <option>Agargaon</option>
+                            <option>Bijoy Sarani</option>
+                            <option>Farmgate</option>
+                            <option>Kawran Bazar</option>
+                            <option>Shahbagh</option>
                             <option>Dhaka University</option>
                             <option>Bangladesh Secretariat</option>
-                            <option>motijheel</option>
+                            <option>Motijheel</option>
+                            <option>Komolapur</option>
                         </select>
                         {
                             error.from ?
@@ -254,23 +331,25 @@ const Home = () => {
 
                     <div className="mb-6">
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">To</label>
-                        <select id="countries" name="to" className={`${error.to ? "bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-red-100 dark:border-red-400" : "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}`}>
+                        <select id="destination" onChange={(e) => handleSelectChangeTo(e.target.value)} name="to" className={`${error.to ? "bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-red-100 dark:border-red-400" : "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}`}>
                             <option>Select Station</option>
                             <option>Uttara North</option>
                             <option>Uttara Center</option>
                             <option>Uttara South</option>
-                            <option>pallabi</option>
-                            <option>Mirpur-11</option>
-                            <option>Mirpur-10</option>
+                            <option>Pallabi</option>
+                            <option>Mirpur 11</option>
+                            <option>Mirpur 10</option>
                             <option>Kazipara</option>
                             <option>Shewrapara</option>
-                            <option>Bijoy Sarawni</option>
-                            <option>Framgate</option>
-                            <option>Karwan Bazar</option>
-                            <option>Shahbag</option>
+                            <option>Agargaon</option>
+                            <option>Bijoy Sarani</option>
+                            <option>Farmgate</option>
+                            <option>Kawran Bazar</option>
+                            <option>Shahbagh</option>
                             <option>Dhaka University</option>
                             <option>Bangladesh Secretariat</option>
-                            <option>motijheel</option>
+                            <option>Motijheel</option>
+                            <option>Komolapur</option>
                         </select>
                         {
                             error.to ?
@@ -278,15 +357,18 @@ const Home = () => {
                         }
                     </div>
 
-                    <div className="mb-6">
+                    {/* <div className="mb-6">
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone No</label>
                         <input type="tel" name="phone" className={`${error.phone ? "bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-red-100 dark:border-red-400" : "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}`} placeholder="Phone no" />
                         {
                             error.phone ?
                                 <p className="mt-2 text-sm text-red-600 dark:text-red-500"><span className="font-medium"></span> {error.phone}</p> : <></>
                         }
+                    </div> */}
+                    <div className="mb-6">
+                        <h1 className={`border border-blue-500 rounded-lg p-[10px] block mb-2  text-xl font-medium text-gray-900 dark:text-white ${originSelect && destSelect ? 'block' : 'hidden'}`}>Fair for the choice : <span className="text-green-600">{originSelect && destSelect ? fair : '0'} BDT</span> </h1>
                     </div>
-                    <div className="flex">
+                    {/* <div className="flex">
                         <div className="mb-6">
                             <button onClick={() => setEmail(true)} className="border border-blue-500 rounded-lg p-[10px] block mb-2 text-sm font-medium text-gray-900 dark:text-white">Don't have a phone number ?</button>
                         </div>
@@ -295,23 +377,42 @@ const Home = () => {
                                 <img src={gmail} className="h-4 w-4" /> <span className="ml-2">Gmail</span>
                             </button>
                         </div>
-                    </div>
+                    </div> */}
                     <input type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" value="Continue" />
                 </form>
 
-
-                <div className="md:ml-10 md:mr-2 md:mt-0 mt-8">
+                <div className={`md:ml-10 md:mr-2 md:mt-0 mt-8 ${originSelect && destSelect ? 'hidden' : ''}`}>
                     <ul className=" w-full h-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                        <li className=" text-2xl w-full px-4 py-2 border-b-4 border-green-600 rounded-t-lg dark:border-gray-600 flex items-center">
+                        <li className=" text-2xl w-full px-4 py-2 border-b-4 border-green-600 rounded-t-lg dark:border-gray-600 flex items-center justify-between">
+                            <div className="flex items-center">
                             <img src={info} className="w-7 h-7" />
-                            <span className="ml-4">Instructions</span></li>
-                        <li className="text-lg w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600">1. Select start station from the form on the left</li>
-                        <li className="text-lg w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600">2. Select destination station from the form on the left</li>
-                        <li className="w-full px-4 py-2 text-lg border-b border-gray-200 dark:border-gray-600">3. Provide your phone number (If available)</li>
-                        <li className="w-full px-4 py-2 rounded-b-lg text-lg border-b border-gray-200 dark:border-gray-600">4. If phone number is not available then proceed with "Don't have a phone number"</li>
-                        <li className="w-full px-4 py-2 rounded-b-lg text-lg border-b border-gray-200 dark:border-gray-600">5. Provide your email address</li>
-                        <li className="w-full px-4 py-2 rounded-b-lg text-lg border-b border-gray-200 dark:border-gray-600">6. Press continue to proceed</li>
+                            <span className="ml-4">{ban ? 'নির্দেশনা' : 'Instructions'}</span>
+                            </div>
+                            <span className="">
+                            
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                
+                                    <input onChange={() => setBan(!ban)} type="checkbox" value="" className="sr-only peer"/>
+                                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                        <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">{ban ? 'BN':'EN'}</span>
+                                </label>
+                            </span></li>
+                        <li className="text-lg w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600">{ban ? '১. বাম দিকের ফর্ম থেকে স্টার্ট স্টেশন নির্বাচন করুন৷' : '1. Select start station from the form on the left'}</li>
+                        <li className="text-lg w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600">{ban ? '2. বাম দিকের ফর্ম থেকে গন্তব্য স্টেশন নির্বাচন করুন৷' : '2. Select destination station from the form on the left'}</li>
+                        <li className="w-full px-4 py-2 rounded-b-lg text-lg border-b border-gray-200 dark:border-gray-600">{ban ? '৩. চালিয়ে যেতে প্রেস করুন' : '3. Press continue to proceed'}</li>
                     </ul>
+                </div>
+                <div className={`md:ml-10 md:mr-2 md:mt-0 mt-8 ${originSelect && destSelect ? 'block' : 'hidden'}`}>
+
+                    <LoadScript googleMapsApiKey={apiKey}>
+                        <GoogleMap
+                            mapContainerStyle={{ height: '100%', width: '100%' }}
+                            center={{ lat: 23.827960749304314, lng: 90.36445188667143 }} // Default map center
+                            zoom={15} // Default zoom level
+                        >
+                            {directions && <DirectionsRenderer directions={directions} />}
+                        </GoogleMap>
+                    </LoadScript>
                 </div>
 
 
@@ -342,27 +443,38 @@ const Home = () => {
                                 <td>Cy Ganderton</td>
                                 <td>Quality Control Specialist</td>
                             </tr>
-                            
+
                             <tr className="hover">
                                 <th>2</th>
                                 <td>Hart Hagerty</td>
                                 <td>Desktop Support Technician</td>
                             </tr>
-                            
+
                             <tr className="hover">
                                 <th>3</th>
                                 <td>Brice Swyre</td>
                                 <td>Tax Accountant</td>
-                            </tr> 
+                            </tr>
                         </tbody>
                     </table>
                     <button className="btn  w-full mt-4">See More</button>
                 </div>
                 <div className="mt-8 md:ml-16 flex center">
-                    <iframe width="750" height="315" src="https://www.youtube.com/embed/3KtdjhgGi7g" title="YouTube video player"  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe width="750" height="315" src="https://www.youtube.com/embed/3KtdjhgGi7g" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
 
+            {/* <div className="hidden">
+                <LoadScript googleMapsApiKey={apiKey}>
+                    <GoogleMap
+                        mapContainerStyle={{ height: '100%', width: '100%' }}
+                        center={{ lat: 23.827960749304314, lng: 90.36445188667143 }} // Default map center
+                        zoom={15} // Default zoom level
+                    >
+                        {directions && <DirectionsRenderer directions={directions} />}
+                    </GoogleMap>
+                </LoadScript>
+            </div> */}
 
         </div>
     );

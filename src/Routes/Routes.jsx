@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Main from "../Main/Main";
 import Home from "../Home/Home";
 import MRT from "../MRT/MRT";
+import MapWithForm from "../MapWithForm/MapWithForm";
 const routes = createBrowserRouter([
     {
         path: "/",
@@ -14,6 +15,10 @@ const routes = createBrowserRouter([
             {
                 path:"/mrt",
                 element:<MRT></MRT>
+            },
+            {
+                path:"/route",
+                element:<MapWithForm></MapWithForm>
             }
         ]
     },

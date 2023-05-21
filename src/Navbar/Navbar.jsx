@@ -21,9 +21,7 @@ const Navbar = () => {
                     <li><NavLink to="/" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-teal-300" : ""}>Home</NavLink></li>
                     <li><HashLink smooth to="/#scroll">Buy Ticket </HashLink></li>
                     <li><NavLink to="/mrt" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-teal-300" : ""}> MRT Pass</NavLink></li>
-                    <li><NavLink to="/mrt" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-teal-300" : ""}>Travel & Fair</NavLink></li>
-                    <li><NavLink to="/mrt" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-teal-300" : ""}>Route & Stations</NavLink></li>
-                    <li><NavLink to="/mrt" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-teal-300" : ""}>User Guide</NavLink></li>
+                    <li><NavLink to="/route" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-teal-300" : ""}>Route & Stations</NavLink></li>
 
                 </ul>
                 <div className={` gap-2 hidden  ${isLogged ? "md:flex z-30": ""}`}>
@@ -62,9 +60,7 @@ const Navbar = () => {
                             <li><NavLink to="/" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-teal-300" : ""}>Home</NavLink></li>
                             <li><HashLink smooth to="/#scroll">Buy Ticket </HashLink></li>
                             <li><Link to="/mrt">MRT Pass</Link></li>
-                            <li><Link to="/mrt">Travel & Fair</Link></li>
-                            <li><Link to="/mrt">Routes & Stations</Link></li>
-                            <li><Link to="/mrt">User Guide</Link></li>
+                            <li><Link to="/route">Routes & Stations</Link></li>
                             {
                                 isLogged ? <div>
                                     <li><a>Logout</a></li><li><a>Profile</a></li>
