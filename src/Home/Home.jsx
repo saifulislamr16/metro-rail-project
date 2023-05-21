@@ -1,9 +1,10 @@
-import Navbar from "../Navbar/Navbar";
+
 import Marquee from "react-fast-marquee";
 import { useEffect, useState } from "react";
 import gmail from "../../public/gmail.png"
 import info from "../../public/info.png"
 import Ticket from "../../public/ticket.png"
+import news from "../../public/megaphone.png"
 import './Home.css'
 const Home = () => {
 
@@ -16,6 +17,7 @@ const Home = () => {
     const [error, setError] = useState({});
     const [email, setEmail] = useState(false);
     const [ticket, setTicket] = useState({});
+    const [data, setData] = useState(null);
     const fetchWeatherData = () => {
         fetch(weatherApi)
             .then(res => res.json())
@@ -32,7 +34,6 @@ const Home = () => {
             clearInterval(interval);
         };
     }, []);
-    console.log(weather);
     useEffect(() => {
         fetch(dateApi)
             .then(res => res.json())
@@ -138,7 +139,12 @@ const Home = () => {
 
     };
 
-    console.log(ticket);
+    useEffect(() => {
+        fetch('data.json')
+        .then(res => res.json())
+        .then(data => setData(data));
+    },[])
+
 
     return (
         <div>
@@ -153,7 +159,7 @@ const Home = () => {
                         </Marquee>
                     </div>
                 </div>
-                <div className="md:p-12 p-3 mx-auto absolute md:top-1/3 md:left-1/3 top-60 left-0  text-center flex flex-col justify-center items-center backdrop-blur-sm bg-black/30 rounded-sm">
+                <div className="md:p-12 p-3 mx-auto absolute md:top-1/4 md:left-1/3 top-60 left-0  text-center flex flex-col justify-center items-center backdrop-blur-sm bg-black/30 rounded-sm">
                     <h1 id="google_translate_element" className="md:text-5xl text-3xl drop-shadow-2xl font-bold text-white"><span className="text-sky-500">Welcome</span> to Dhaka Metro</h1>
                     <div className="md:text-3xl text-xl drop-shadow-2xl font-semibold text-white  mt-10">
                         {
@@ -211,11 +217,11 @@ const Home = () => {
             </div>
 
             <div id="scroll" className="flex justify-center ">
-                
-                <h1 className=" bg-blue-100 rounded-lg md:py-5 py-2 md:px-60 px-14 md:text-5xl text-xlfont-semibold md:mt-16 mt-8 md:mb-7 mb-5 border-b-4 w-fit border-blue-800 flex"><span><img className=" md:mr-5 mr-2 md:w-14 md:h-14 w-8 h-8" src={Ticket}/></span>Purchase a ticket</h1>
+
+                <h1 className=" bg-blue-100 rounded-lg md:py-5 py-2 md:px-60 px-14 md:text-5xl text-xlfont-semibold md:mt-16 mt-8 md:mb-7 mb-5 border-b-4 w-fit border-blue-800 flex"><span><img className=" md:mr-5 mr-2 md:w-14 md:h-14 w-8 h-8" src={Ticket} /></span>Purchase a ticket</h1>
             </div>
 
-            <div  className="mx-auto grid md:grid-cols-2 grid-cols-1 w-full md:py-10 py-5 md:px-20 px-5 rounded-md bg-gray-100">
+            <div className="mx-auto grid md:grid-cols-2 grid-cols-1 w-full md:py-10 py-5 md:px-20 px-5 rounded-md bg-gray-100">
 
 
                 <form className="md:border-r-4 border-slate-700 md:pr-10" onSubmit={handleSignUp}>
@@ -297,7 +303,7 @@ const Home = () => {
                 <div className="md:ml-10 md:mr-2 md:mt-0 mt-8">
                     <ul className=" w-full h-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         <li className=" text-2xl w-full px-4 py-2 border-b-4 border-green-600 rounded-t-lg dark:border-gray-600 flex items-center">
-                            <img src={info} className="w-7 h-7"/>
+                            <img src={info} className="w-7 h-7" />
                             <span className="ml-4">Instructions</span></li>
                         <li className="text-lg w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600">1. Select start station from the form on the left</li>
                         <li className="text-lg w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600">2. Select destination station from the form on the left</li>
@@ -313,7 +319,49 @@ const Home = () => {
 
             </div>
 
+            <div id="scroll" className="flex justify-center ">
 
+                <h1 className=" bg-blue-100 rounded-lg md:py-5 py-2 md:px-60 px-14 md:text-5xl text-xlfont-semibold md:mt-36 mt-8 md:mb-7 mb-5 border-b-4 w-fit border-blue-800 flex"><span><img className=" md:mr-5 mr-2 md:w-14 md:h-14 w-8 h-8" src={news} /></span>News and Notices</h1>
+            </div>
+            <div className=" bg-gray-100 mt-5 md:grid grid-cols-6 md:px-36 px-2 md:py-8 border-2 gap-5">
+
+                <div className="overflow-x-auto md:col-span-4">
+                    <h1 className="mb-5 md:text-3xl text-lg text-center text-blue-600 font-semibold">Topics</h1>
+                    <table className="table w-full">
+                        {/* head */}
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Date</th>
+                                <th>Title</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr className="hover">
+                                <th>1</th>
+                                <td>Cy Ganderton</td>
+                                <td>Quality Control Specialist</td>
+                            </tr>
+                            
+                            <tr className="hover">
+                                <th>2</th>
+                                <td>Hart Hagerty</td>
+                                <td>Desktop Support Technician</td>
+                            </tr>
+                            
+                            <tr className="hover">
+                                <th>3</th>
+                                <td>Brice Swyre</td>
+                                <td>Tax Accountant</td>
+                            </tr> 
+                        </tbody>
+                    </table>
+                    <button className="btn  w-full mt-4">See More</button>
+                </div>
+                <div className="mt-8 md:ml-16 flex center">
+                    <iframe width="750" height="315" src="https://www.youtube.com/embed/3KtdjhgGi7g" title="YouTube video player"  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+            </div>
 
 
         </div>
