@@ -475,7 +475,7 @@ const Home = () => {
                             </tr>
                         </tbody>
                     </table>
-                    <button className="btn  w-full mt-4">See More</button>
+                    <button onClick={() => window.location.href = 'http://dmtcl.gov.bd/site/view/notices'} className="btn  w-full mt-4">See More</button>
                 </div>
                 <div className="mt-8 md:ml-16 flex center">
                     <iframe width="750" height="315" src="https://www.youtube.com/embed/3KtdjhgGi7g" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>

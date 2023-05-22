@@ -1,5 +1,5 @@
 import { useState } from "react";
-import info from "../../public/info.png"
+import infoimg from "../../public/info.png"
 import card from "../../public/card.png"
 import Navbar from "../Navbar/Navbar";
 
@@ -174,14 +174,16 @@ const MRT = () => {
                 <div className="md:ml-10 md:mr-2 md:mt-0 mt-8">
                     <ul className=" w-full h-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         <li className=" text-2xl w-full px-4 py-2 border-b-4 border-green-600 rounded-t-lg dark:border-gray-600 flex items-center">
-                            <img src={info} className="w-7 h-7" />
+                            <img src={infoimg} className="w-7 h-7" />
                             <span className="ml-4">Instructions</span></li>
                         <li className="text-lg w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600">1. Inset your name and date of birth properly</li>
                         <li className="text-lg w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600">2. Select Your gender</li>
-                        <li className="w-full px-4 py-2 text-lg border-b border-gray-200 dark:border-gray-600">3. Provide your phone number (If available)</li>
-                        <li className="w-full px-4 py-2 rounded-b-lg text-lg border-b border-gray-200 dark:border-gray-600">4. If phone number is not available then proceed with "Don't have a phone number"</li>
-                        <li className="w-full px-4 py-2 rounded-b-lg text-lg border-b border-gray-200 dark:border-gray-600">5. Provide your email address</li>
-                        <li className="w-full px-4 py-2 rounded-b-lg text-lg border-b border-gray-200 dark:border-gray-600">6. Press continue to proceed</li>
+                        <li className="w-full px-4 py-2 text-lg border-b border-gray-200 dark:border-gray-600">3. Choose NID/Passport/Birth Certificate, that you have and provide the Id/Number of that</li>
+                        <li className="w-full px-4 py-2 rounded-b-lg text-lg border-b border-gray-200 dark:border-gray-600">4. Insert your Job title in Designation field"</li>
+                        <li className="w-full px-4 py-2 rounded-b-lg text-lg border-b border-gray-200 dark:border-gray-600">5. Provide your Address properly</li>
+                        <li className="w-full px-4 py-2 rounded-b-lg text-lg border-b border-gray-200 dark:border-gray-600">6. Provide your phone number nad Email</li>
+                        <li className="w-full px-4 py-2 rounded-b-lg text-lg border-b border-gray-200 dark:border-gray-600">7. Press Apply to purchase MRT Pass</li>
+                        <li className="w-full px-4 py-2 rounded-b-lg text-lg border-b border-gray-200 dark:border-gray-600 text-red-600">*Note: The MRT pass will cost you 500 BDT</li>
                     </ul>
                 </div>
             </div>

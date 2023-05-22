@@ -5,6 +5,7 @@ import MRT from "../MRT/MRT";
 import MapWithForm from "../MapWithForm/MapWithForm";
 import Login from "../component/Login";
 import SignUp from "../component/SignUp";
+import Pass from "../Passs/Pass";
 const routes = createBrowserRouter([
     {
         path: "/",
@@ -29,6 +30,10 @@ const routes = createBrowserRouter([
             {
                 path:"/Signup",
                 element:<SignUp></SignUp>
+            },
+            {
+                path:"/pass",
+                element:<Pass></Pass>
             }
         ]
     },
